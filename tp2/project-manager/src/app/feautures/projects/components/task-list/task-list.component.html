@@ -1,17 +1,27 @@
 <div class="mt-4 space-y-3">
 
-  @for (task of tasks; track task.title) {
-    <div
-  class="p-3 rounded-xl shadow-sm"
-  [ngClass]="getColor(task.status)">
+  <!-- Check if tasks exist -->
+  <div *ngIf="tasks && tasks.length > 0; else noTasks" class="space-y-3">
+    @for (task of tasks; track task.title) {
+      <div
+        class="p-3 rounded-xl shadow-sm"
+        appHighlightStatus="{{ task.status }}">
 
-  <p class="font-semibold text-gray-700">
-    {{ task.title }}
-  </p>
+        <!-- Apply priorityColor pipe here -->
+        <p class="font-semibold" [ngClass]="task.priority | priorityColor">
+          {{ task.title }}
+        </p>
 
-  <p class="text-sm text-gray-500">
-    Priorité : {{ task.priority }} · {{ task.status }}
-  </p>
-</div>
-  }
+        <p class="text-sm text-gray-500">
+          Priorité : {{ task.priority }} · {{ task.status }}
+        </p>
+      </div>
+    }
+  </div>
+
+  <!-- Else template -->
+  <ng-template #noTasks>
+    <p class="text-gray-400 italic">Aucune tâche</p>
+  </ng-template>
+
 </div>

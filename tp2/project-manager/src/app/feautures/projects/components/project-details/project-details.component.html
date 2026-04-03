@@ -1,0 +1,42 @@
+<div *ngIf="project" class="mt-6 bg-white border border-green-200 rounded-2xl shadow-lg p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center">
+    <h2 class="text-2xl font-bold text-green-700">📁 {{ project.name }}</h2>
+    <span class="px-3 py-1 text-sm rounded-full font-medium"
+          [ngClass]="{
+            'bg-yellow-100 text-yellow-700': project.status === 'En cours',
+            'bg-green-100 text-green-700': project.status === 'Terminé',
+            'bg-red-100 text-red-700': project.status === 'En attente'
+          }">
+      {{ project.status }}
+    </span>
+  </div>
+
+  <!-- Description -->
+  <p class="text-gray-600 text-lg">{{ project.description }}</p>
+
+  <!-- Optional: creation date & progress -->
+  <p class="text-gray-500 text-sm">Créé le: {{ project.createdAt || 'N/A' }}</p>
+  <p class="text-gray-500 text-sm">Progression: {{ project.progress || 0 }}%</p>
+
+  <!-- Tasks Section -->
+  <div>
+    <h3 class="text-lg font-semibold text-green-600 mb-3">📝 Tâches</h3>
+    <app-task-list [tasks]="project.tasks"></app-task-list>
+    <p *ngIf="!project.tasks?.length" class="text-gray-400 italic">Aucune tâche</p>
+  </div>
+  <!-- Progression des tâches -->
+<div class="mt-4">
+  <p class="text-sm text-gray-500 mb-1">
+    Progression des tâches : {{ getProgress() | number:'1.0-0' }}%
+  </p>
+
+  <div class="w-full bg-gray-200 rounded-full h-3">
+    <div class="bg-green-500 h-3 rounded-full transition-all duration-500"
+         [style.width.%]="getProgress()">
+    </div>
+  </div>
+</div>
+
+</div>
