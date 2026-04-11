@@ -1,3 +1,26 @@
-<div class="min-h-screen bg-gradient-to-br from-green-100 via-pink-100 to-green-200 p-6">
-  <app-project-list></app-project-list>
+<!-- Wrapper racine : applique le fond global -->
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+  <!-- Barre de navigation -->
+  <header class="flex justify-between items-center px-6 py-4
+                 bg-white dark:bg-gray-800
+                 shadow dark:shadow-gray-700">
+    <h1 class="text-xl font-bold text-green-700 dark:text-green-400">
+      🗂️ Mes Projets
+    </h1>
+
+    <!-- Bouton toggle -->
+    <button
+      (click)="toggleDarkMode()"
+      class="px-4 py-2 rounded-xl font-medium transition-colors duration-200
+             bg-gray-200 dark:bg-gray-700
+             text-gray-800 dark:text-white
+             hover:bg-gray-300 dark:hover:bg-gray-600">
+      {{ isDarkMode ? '☀️ Mode clair' : '🌙 Mode sombre' }}
+    </button>
+  </header>
+
+  <!-- Contenu principal -->
+  <main class="p-6">
+    <app-project-list></app-project-list>
+  </main>
 </div>

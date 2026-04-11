@@ -1,11 +1,29 @@
-import { Component, signal } from '@angular/core';
-import {ProjectListComponent} from "./feautures/projects/components/project-list/project-list.component";
+import { Component, OnInit } from '@angular/core';
+import { ProjectListComponent } from './feautures/projects/components/project-list/project-list.component';
+
 @Component({
   selector: 'app-root',
-  imports: [ProjectListComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
+  imports: [ProjectListComponent]
 })
-export class AppComponent {
-  protected readonly title = signal('project-manager');
+export class AppComponent implements OnInit {
+  title = 'Mes Projets';
+  isDarkMode = false;
+
+  ngOnInit() {
+    // Load saved preference from localStorage
+    this.isDarkMode = localStorage.getItem('darkMode') === 'true';
+    this.updateDarkMode();
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('darkMode', String(this.isDarkMode));
+    this.updateDarkMode();
+  }
+
+  private updateDarkMode() {
+    document.documentElement.classList.toggle('dark', this.isDarkMode);
+  }
 }

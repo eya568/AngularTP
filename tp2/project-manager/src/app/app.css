@@ -1,0 +1,174 @@
+@tailwind   
+/* ===== THÈME CLAIR (défaut) ===== */
+:root {
+  --bg-main:        #f9fafb;
+  --bg-card:        #ffffff;
+  --bg-header:      #ffffff;
+  --bg-input:       #ffffff;
+  --bg-badge:       #dcfce7;
+  --bg-btn:         #16a34a;
+  --bg-btn-toggle:  #e5e7eb;
+
+  --text-title:     #15803d;
+  --text-body:      #22c55e;
+  --text-badge:     #15803d;
+  --text-main:      #111827;
+  --text-btn-toggle:#111827;
+  --text-muted:     #9ca3af;
+
+  --border-card:    #bbf7d0;
+  --border-input:   #d1d5db;
+  --shadow-card:    rgba(134,239,172,0.4);
+}
+
+/* ===== THÈME SOMBRE ===== */
+html.dark {
+  --bg-main:        #111827;
+  --bg-card:        #1f2937;
+  --bg-header:      #1f2937;
+  --bg-input:       #374151;
+  --bg-badge:       #14532d;
+  --bg-btn:         #15803d;
+  --bg-btn-toggle:  #374151;
+
+  --text-title:     #4ade80;
+  --text-body:      #86efac;
+  --text-badge:     #86efac;
+  --text-main:      #f9fafb;
+  --text-btn-toggle:#f9fafb;
+  --text-muted:     #6b7280;
+
+  --border-card:    #374151;
+  --border-input:   #4b5563;
+  --shadow-card:    transparent;
+}
+
+/* ===== STYLES GLOBAUX ===== */
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh;
+}
+
+/* Header */
+.app-header {
+  background-color: var(--bg-header);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-title);
+}
+
+/* Bouton toggle dark mode */
+.btn-toggle {
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: var(--bg-btn-toggle);
+  color: var(--text-btn-toggle);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Cards projet */
+.project-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  box-shadow: 0 4px 12px var(--shadow-card);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.project-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-title);
+}
+
+.project-card p {
+  color: var(--text-body);
+}
+
+/* Badge status */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: var(--bg-badge);
+  color: var(--text-badge);
+}
+
+/* Input recherche */
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-input);
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  transition: background-color 0.3s, border-color 0.3s;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--text-title);
+  box-shadow: 0 0 0 2px rgba(22,163,74,0.3);
+}
+
+/* Bouton action */
+.btn-action {
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  background-color: var(--bg-btn);
+  color: white;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.btn-action:hover { opacity: 0.85; }
+
+/* Bouton supprimer */
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #ef4444;
+  transition: color 0.2s;
+}
+.btn-delete:hover { color: #b91c1c; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  background-color: #16a34a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Texte vide */
+.empty-text {
+  color: var(--text-muted);
+  font-style: italic;
+}

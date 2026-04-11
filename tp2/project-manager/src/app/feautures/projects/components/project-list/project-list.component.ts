@@ -18,6 +18,14 @@ import { FormsModule, NgModel } from '@angular/forms';
 export class ProjectListComponent {
   selectedProject: any = null;
   searchTerm: string = ''; 
+  message: string = '';
+  showMessage(msg: string) {
+  this.message = msg;
+
+  setTimeout(() => {
+    this.message = '';
+  }, 3000);
+}
   projects = [
     {
       name: 'Projet 1',
@@ -48,6 +56,16 @@ export class ProjectListComponent {
   );
   
   
+}
+deleteProject(project: any) {
+  this.projects = this.projects.filter(p => p !== project);
+
+  // Si le projet supprimé est sélectionné → reset
+  if (this.selectedProject === project) {
+    this.selectedProject = null;
+  }
+
+  this.showMessage("Projet supprimé avec succès ✅");
 }
 
 }

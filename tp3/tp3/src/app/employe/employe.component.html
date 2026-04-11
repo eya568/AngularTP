@@ -1,0 +1,9 @@
+<li>Nom: {{info_employe.nom}}</li>
+<li>Prenom: {{info_employe.prenom}}</li>
+<li>{{info_employe.telephone}}</li>
+<h2>Agenda</h2>
+<ul>
+    <li *ngFor="let item of agenda">
+        {{item.date | date: "dd/MM/yyyy" }} - {{item.message}}
+    </li>
+</ul>
