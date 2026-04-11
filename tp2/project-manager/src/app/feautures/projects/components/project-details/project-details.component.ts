@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Project, Task } from '../models/project.model';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
+import { FriendlyDatePipe } from '../../../../pipes/friendly-date.pipe-pipe';
 @Component({
   selector: 'app-project-details',
   standalone: true,
-  imports: [CommonModule, TaskListComponent, StatusBadgeComponent],
+  imports: [CommonModule, TaskListComponent, StatusBadgeComponent, FriendlyDatePipe],
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.css']
 })

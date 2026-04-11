@@ -7,7 +7,7 @@
   <p class="text-gray-600 text-lg">{{ project.description }}</p>
 
   <!-- Optional: creation date & progress -->
-  <p class="text-gray-500 text-sm">Créé le: {{ project.createdAt || 'N/A' }}</p>
+  <p class="text-gray-500 text-sm">Créé le: {{ project.createdAt | friendlyDate }}</p>
   <p class="text-gray-500 text-sm">Progression: {{ project.progress || 0 }}%</p>
 
   <!-- Tasks Section -->

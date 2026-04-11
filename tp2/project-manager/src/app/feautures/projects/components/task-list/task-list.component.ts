@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { HighlightStatusDirective } from '../../../../highlight-status';
 import { PriorityColorPipe } from '../../../../priority-color-pipe';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { StatusEmojiPipe } from '../../../../pipes/status-emoji.pipe-pipe';
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, HighlightStatusDirective, PriorityColorPipe],
+  imports: [CommonModule, HighlightStatusDirective, PriorityColorPipe,StatusEmojiPipe],
   templateUrl: './task-list.component.html',
    animations: [
     trigger('fadeInOut', [

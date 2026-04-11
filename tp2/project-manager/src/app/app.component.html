@@ -1,6 +1,5 @@
 <!-- Wrapper racine : applique le fond global -->
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-  <!-- Barre de navigation -->
+<div [ngClass]="darkMode ? 'bg-gray-900 text-white min-h-screen' : 'bg-white min-h-screen'">  <!-- Barre de navigation -->
   <header class="flex justify-between items-center px-6 py-4
                  bg-white dark:bg-gray-800
                  shadow dark:shadow-gray-700">
@@ -9,14 +8,11 @@
     </h1>
 
     <!-- Bouton toggle -->
-    <button
-      (click)="toggleDarkMode()"
-      class="px-4 py-2 rounded-xl font-medium transition-colors duration-200
-             bg-gray-200 dark:bg-gray-700
-             text-gray-800 dark:text-white
-             hover:bg-gray-300 dark:hover:bg-gray-600">
-      {{ isDarkMode ? '☀️ Mode clair' : '🌙 Mode sombre' }}
-    </button>
+   <button
+    class="m-4 px-4 py-2 rounded bg-gray-200  text-gray-800 dark:bg-gray-700 dark:text-white"
+    (click)="toggleTheme()">
+    🌙 Mode sombre / clair
+  </button>
   </header>
 
   <!-- Contenu principal -->
