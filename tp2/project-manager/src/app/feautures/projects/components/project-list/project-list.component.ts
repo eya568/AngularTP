@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { ProjectDetailsComponent } from '../project-details/project-details.component'; // ✅ AJOUT
 import { FormsModule, NgModel } from '@angular/forms';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 @Component({
   selector: 'app-project-list',
   standalone: true,
   imports: [
     CommonModule,        
-    TaskListComponent,
     ProjectDetailsComponent,
     FormsModule,
+    DashboardComponent
     
   ],
   templateUrl: './project-list.component.html'

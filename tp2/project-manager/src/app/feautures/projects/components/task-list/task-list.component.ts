@@ -4,10 +4,14 @@ import { HighlightStatusDirective } from '../../../../highlight-status';
 import { PriorityColorPipe } from '../../../../priority-color-pipe';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { StatusEmojiPipe } from '../../../../pipes/status-emoji.pipe-pipe';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, HighlightStatusDirective, PriorityColorPipe,StatusEmojiPipe],
+  imports: [CommonModule, FormsModule,
+    HighlightStatusDirective, 
+    PriorityColorPipe,
+    StatusEmojiPipe],
   templateUrl: './task-list.component.html',
    animations: [
     trigger('fadeInOut', [
@@ -22,7 +26,7 @@ import { StatusEmojiPipe } from '../../../../pipes/status-emoji.pipe-pipe';
   ]
 })
 export class TaskListComponent {
-
+selectedPriority: string = '';
   @Input() tasks: any[] = [];
 @Output() statusChanged = new EventEmitter<void>();
 
@@ -32,7 +36,15 @@ changeStatus(task: any) {
 
   this.statusChanged.emit();
 }
- 
+ get filteredTasks() {
+  if (!this.selectedPriority) {
+    return this.tasks;
+  }
+
+  return this.tasks.filter(task =>
+    task.priority === this.selectedPriority
+  );
+}
 }
 
   

@@ -1,5 +1,12 @@
+
 <div class="max-w-3xl mx-auto space-y-6">
-<div *ngIf="message"
+
+<!-- Dashboard Card -->
+<div class="bg-white rounded-2xl shadow p-6">
+  <app-dashboard [projects]="projects"></app-dashboard>
+</div>
+
+  <div *ngIf="message"
      class="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow transition-all duration-500">
   {{ message }}
 </div>
@@ -7,7 +14,7 @@
   <input
     [(ngModel)]="searchTerm"
     placeholder="Rechercher un projet"
-    class="w-full p-3 border rounded-xl mb-4"
+    class="w-full p-3 border border-gray-300 rounded-xl mb-4 bg-white text-gray-900 placeholder-gray-500"
   />
 
   <!-- Check if filtered projects exist -->
@@ -45,7 +52,6 @@
       </div>
     }
   </div>
-
   <!-- Else template -->
   <ng-template #noProjects>
     <p class="text-gray-400 italic">Aucun projet trouvé</p>
