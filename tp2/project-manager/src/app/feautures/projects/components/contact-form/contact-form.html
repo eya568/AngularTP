@@ -94,19 +94,55 @@
     }
   </div>
 
-  <!-- 🏠 ADDRESS (FIXED: removed duplicate ville) -->
  <!-- 🏠 ADDRESS -->
-<div formGroupName="adresse" class="space-y-3 border p-4 rounded-xl">
+<!-- 🏠 ADRESSES (FORMARRAY) -->
+<div formArrayName="adresses" class="space-y-4 border p-4 rounded-xl">
 
-  <input type="text" placeholder="Rue" formControlName="rue"/>
-  
-  <input type="text" placeholder="Code Postal" formControlName="codePostal"/>
+  <div *ngFor="let adr of adresses.controls; let i = index"
+       [formGroupName]="i"
+       class="space-y-2 border p-3 rounded-lg">
 
-  <input type="text" placeholder="Ville" formControlName="ville"/>
+    <!-- TYPE -->
+    <select formControlName="type"
+      class="w-full p-2 border rounded">
+      <option value="domicile">Domicile</option>
+      <option value="travail">Travail</option>
+      <option value="autre">Autre</option>
+    </select>
 
-  <input type="text" placeholder="Pays" formControlName="pays"/>
+    <!-- RUE -->
+    <input type="text" placeholder="Rue" formControlName="rue"
+      class="w-full p-2 border rounded"/>
+
+    <!-- CODE POSTAL -->
+    <input type="text" placeholder="Code Postal" formControlName="codePostal"
+      class="w-full p-2 border rounded"/>
+
+    <!-- VILLE -->
+    <input type="text" placeholder="Ville" formControlName="ville"
+      class="w-full p-2 border rounded"/>
+
+    <!-- DELETE -->
+    <button type="button"
+      (click)="removeAddress(i)"
+      class="bg-red-500 text-white px-3 py-1 rounded mt-2"
+      [disabled]="adresses.length === 1">
+
+      Supprimer
+    </button>
+
+  </div>
+
+  <!-- ADD BUTTON -->
+  <button type="button"
+    (click)="addAddress()"
+    class="bg-blue-500 text-white px-4 py-2 rounded">
+
+    + Ajouter une adresse
+  </button>
 
 </div>
+
 
 
   <!-- PASSWORD -->
