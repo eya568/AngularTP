@@ -1,0 +1,168 @@
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()"
+  class="max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-lg space-y-6 border border-gray-100">
+
+  <h2 class="text-2xl font-semibold text-gray-800 text-center">
+    📩 Contactez-nous
+  </h2>
+
+  <!-- NOM -->
+  <div>
+    <input type="text" placeholder="Nom" formControlName="nom"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (nom?.touched) {
+      @if (nom?.errors?.['required']) {
+        <p class="text-red-500 text-sm">Nom requis</p>
+      } @else if (nom?.errors?.['minlength']) {
+        <p class="text-red-500 text-sm">Minimum 2 caractères</p>
+      }
+    }
+  </div>
+
+  <!-- PRENOM -->
+  <div>
+    <input type="text" placeholder="Prénom" formControlName="prenom"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (prenom?.touched) {
+      @if (prenom?.errors?.['required']) {
+        <p class="text-red-500 text-sm">Prénom requis</p>
+      } @else if (prenom?.errors?.['minlength']) {
+        <p class="text-red-500 text-sm">Minimum 2 caractères</p>
+      }
+    }
+  </div>
+
+  <!-- EMAIL -->
+  <div>
+    <input type="email" placeholder="Email" formControlName="email"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (email?.touched) {
+      @if (email?.errors?.['required']) {
+        <p class="text-red-500 text-sm">Email requis</p>
+      } @else if (email?.errors?.['email']) {
+        <p class="text-red-500 text-sm">Email invalide</p>
+      } @else if (email?.errors?.['emailExists']) {
+        <p class="text-red-500 text-sm">Cet email existe déjà</p>
+      }
+    }
+
+    @if (email?.pending) {
+      <p class="text-blue-500 text-sm">Vérification en cours...</p>
+    }
+  </div>
+
+  <!-- AGE -->
+  <div>
+    <input type="number" placeholder="Âge" formControlName="age"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (age?.touched) {
+      @if (age?.errors?.['required']) {
+        <p class="text-red-500 text-sm">Âge requis</p>
+      } @else if (age?.errors?.['min']) {
+        <p class="text-red-500 text-sm">Minimum 18 ans</p>
+      } @else if (age?.errors?.['max']) {
+        <p class="text-red-500 text-sm">Maximum 100 ans</p>
+      }
+    }
+  </div>
+
+  <!-- TELEPHONE -->
+  <div>
+    <input type="text" placeholder="Téléphone" formControlName="telephone"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (telephone?.touched && telephone?.errors?.['pattern']) {
+      <p class="text-red-500 text-sm">Numéro invalide</p>
+    }
+  </div>
+
+  <!-- MESSAGE -->
+  <div>
+    <textarea placeholder="Message" formControlName="message"
+      rows="4"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"></textarea>
+
+    @if (message?.touched) {
+      @if (message?.errors?.['required']) {
+        <p class="text-red-500 text-sm">Message requis</p>
+      } @else if (message?.errors?.['minlength']) {
+        <p class="text-red-500 text-sm">Minimum 10 caractères</p>
+      }
+    }
+  </div>
+
+  <!-- 🏠 ADDRESS (FIXED: removed duplicate ville) -->
+ <!-- 🏠 ADDRESS -->
+<div formGroupName="adresse" class="space-y-3 border p-4 rounded-xl">
+
+  <input type="text" placeholder="Rue" formControlName="rue"/>
+  
+  <input type="text" placeholder="Code Postal" formControlName="codePostal"/>
+
+  <input type="text" placeholder="Ville" formControlName="ville"/>
+
+  <input type="text" placeholder="Pays" formControlName="pays"/>
+
+</div>
+
+
+  <!-- PASSWORD -->
+  <div>
+    <input type="password" placeholder="Mot de passe" formControlName="password"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (passwordStrengthErrors) {
+
+      <div class="text-red-500 text-sm">
+
+        @if (!passwordStrengthErrors.hasUpperCase) {
+          <p>• Majuscule requise</p>
+        }
+
+        @if (!passwordStrengthErrors.hasLowerCase) {
+          <p>• Minuscule requise</p>
+        }
+
+        @if (!passwordStrengthErrors.hasNumber) {
+          <p>• Chiffre requis</p>
+        }
+
+        @if (!passwordStrengthErrors.hasSpecialChar) {
+          <p>• Caractère spécial requis</p>
+        }
+
+        @if (!passwordStrengthErrors.isValidLength) {
+          <p>• Minimum 8 caractères</p>
+        }
+
+      </div>
+    }
+  </div>
+
+  <!-- CONFIRM PASSWORD -->
+  <div>
+    <input type="password" placeholder="Confirmer mot de passe" formControlName="confirmPassword"
+      class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
+
+    @if (contactForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
+      <p class="text-red-500 text-sm">Les mots de passe ne correspondent pas</p>
+    }
+  </div>
+
+  <!-- SUBMIT -->
+ <button type="submit"
+  class="w-full bg-green-600 text-white py-3 rounded-xl transition-all"
+  [class.opacity-50]="contactForm.invalid || contactForm.pending"
+  [class.cursor-not-allowed]="contactForm.invalid || contactForm.pending"
+  [disabled]="contactForm.invalid || contactForm.pending">
+
+  Envoyer
+</button>
+
+
+
+
+</form>

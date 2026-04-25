@@ -11,7 +11,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
     CommonModule,        
     ProjectDetailsComponent,
     FormsModule,
-    DashboardComponent
+    DashboardComponent,
     
   ],
   templateUrl: './project-list.component.html'
