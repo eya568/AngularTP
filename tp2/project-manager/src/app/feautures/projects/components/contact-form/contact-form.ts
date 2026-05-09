@@ -4,10 +4,12 @@ import { passwordStrengthValidator, matchPasswordValidator } from '../../../../.
 import { UserService } from '../services/userservice';
 import { emailExistsValidator } from '../../../../../validators/emailExistValidator';
 import { CommonModule } from '@angular/common';
+import { ValidationService } from '../services/ValidationService';
+import { ShowErrorDirective } from '../directives/show-error';
 @Component({
   selector: 'app-contact-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,ShowErrorDirective],
   templateUrl: './contact-form.html',
   styleUrl: './contact-form.css',
 })
@@ -16,9 +18,11 @@ export class ContactForm implements OnInit {
   contactForm!: FormGroup;
 
   constructor(
-    private userService: UserService,
-    private fb: FormBuilder
-  ) {}
+  private userService: UserService,
+  private fb: FormBuilder,
+  public validationService: ValidationService
+) {}
+
 
   ngOnInit() {
 
@@ -39,9 +43,9 @@ export class ContactForm implements OnInit {
 
       age: ['', [Validators.required, Validators.min(18), Validators.max(100)]],
 
-      telephone: ['', [Validators.pattern(/^0[1-9][0-9]{8}$/)]],
+      telephone: ['', [Validators.pattern(/^0[1-9](?:[ .-]?\d{2}){4}$/)]],
 
-      message: ['', [Validators.required, Validators.minLength(10)]],
+      message: ['', [Validators.minLength(10)]],
 
       // 🏠 FORMARRAY ADRESSES (NEW ADDITION ONLY)
       adresses: this.fb.array([

@@ -44,6 +44,6 @@ export function matchPasswordValidator(password: string, confirmPassword: string
       return null;
     }
 
-    return { passwordMismatch: true };
+    return { mustMatch: true };
   };
 }

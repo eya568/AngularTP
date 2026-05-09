@@ -10,13 +10,13 @@
     <input type="text" placeholder="Nom" formControlName="nom"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (nom?.touched) {
-      @if (nom?.errors?.['required']) {
-        <p class="text-red-500 text-sm">Nom requis</p>
-      } @else if (nom?.errors?.['minlength']) {
-        <p class="text-red-500 text-sm">Minimum 2 caractères</p>
-      }
-    }
+    <p *appShowError="nom; errorType: 'required'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(nom) }}
+    </p>
+
+    <p *appShowError="nom; errorType: 'minlength'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(nom) }}
+    </p>
   </div>
 
   <!-- PRENOM -->
@@ -24,13 +24,13 @@
     <input type="text" placeholder="Prénom" formControlName="prenom"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (prenom?.touched) {
-      @if (prenom?.errors?.['required']) {
-        <p class="text-red-500 text-sm">Prénom requis</p>
-      } @else if (prenom?.errors?.['minlength']) {
-        <p class="text-red-500 text-sm">Minimum 2 caractères</p>
-      }
-    }
+    <p *appShowError="prenom; errorType: 'required'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(prenom) }}
+    </p>
+
+    <p *appShowError="prenom; errorType: 'minlength'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(prenom) }}
+    </p>
   </div>
 
   <!-- EMAIL -->
@@ -38,19 +38,21 @@
     <input type="email" placeholder="Email" formControlName="email"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (email?.touched) {
-      @if (email?.errors?.['required']) {
-        <p class="text-red-500 text-sm">Email requis</p>
-      } @else if (email?.errors?.['email']) {
-        <p class="text-red-500 text-sm">Email invalide</p>
-      } @else if (email?.errors?.['emailExists']) {
-        <p class="text-red-500 text-sm">Cet email existe déjà</p>
-      }
-    }
+    <p *appShowError="email; errorType: 'required'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(email) }}
+    </p>
 
-    @if (email?.pending) {
-      <p class="text-blue-500 text-sm">Vérification en cours...</p>
-    }
+    <p *appShowError="email; errorType: 'email'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(email) }}
+    </p>
+
+    <p *appShowError="email; errorType: 'emailExists'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(email) }}
+    </p>
+
+    <p *ngIf="email?.pending" class="text-blue-500 text-sm">
+      Vérification en cours...
+    </p>
   </div>
 
   <!-- AGE -->
@@ -58,15 +60,17 @@
     <input type="number" placeholder="Âge" formControlName="age"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (age?.touched) {
-      @if (age?.errors?.['required']) {
-        <p class="text-red-500 text-sm">Âge requis</p>
-      } @else if (age?.errors?.['min']) {
-        <p class="text-red-500 text-sm">Minimum 18 ans</p>
-      } @else if (age?.errors?.['max']) {
-        <p class="text-red-500 text-sm">Maximum 100 ans</p>
-      }
-    }
+    <p *appShowError="age; errorType: 'required'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(age) }}
+    </p>
+
+    <p *appShowError="age; errorType: 'min'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(age) }}
+    </p>
+
+    <p *appShowError="age; errorType: 'max'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(age) }}
+    </p>
   </div>
 
   <!-- TELEPHONE -->
@@ -74,9 +78,9 @@
     <input type="text" placeholder="Téléphone" formControlName="telephone"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (telephone?.touched && telephone?.errors?.['pattern']) {
-      <p class="text-red-500 text-sm">Numéro invalide</p>
-    }
+    <p *appShowError="telephone; errorType: 'pattern'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(telephone) }}
+    </p>
   </div>
 
   <!-- MESSAGE -->
@@ -85,97 +89,69 @@
       rows="4"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"></textarea>
 
-    @if (message?.touched) {
-      @if (message?.errors?.['required']) {
-        <p class="text-red-500 text-sm">Message requis</p>
-      } @else if (message?.errors?.['minlength']) {
-        <p class="text-red-500 text-sm">Minimum 10 caractères</p>
-      }
-    }
+    <p *appShowError="message; errorType: 'required'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(message) }}
+    </p>
+
+    <p *appShowError="message; errorType: 'minlength'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(message) }}
+    </p>
   </div>
 
- <!-- 🏠 ADDRESS -->
-<!-- 🏠 ADRESSES (FORMARRAY) -->
-<div formArrayName="adresses" class="space-y-4 border p-4 rounded-xl">
+  <!-- 🏠 ADRESSES -->
+  <div formArrayName="adresses" class="space-y-4 border p-4 rounded-xl">
 
-  <div *ngFor="let adr of adresses.controls; let i = index"
-       [formGroupName]="i"
-       class="space-y-2 border p-3 rounded-lg">
+    <div *ngFor="let adr of adresses.controls; let i = index"
+         [formGroupName]="i"
+         class="space-y-2 border p-3 rounded-lg">
 
-    <!-- TYPE -->
-    <select formControlName="type"
-      class="w-full p-2 border rounded">
-      <option value="domicile">Domicile</option>
-      <option value="travail">Travail</option>
-      <option value="autre">Autre</option>
-    </select>
+      <!-- TYPE -->
+      <select formControlName="type"
+        class="w-full p-2 border rounded">
+        <option value="domicile">Domicile</option>
+        <option value="travail">Travail</option>
+        <option value="autre">Autre</option>
+      </select>
 
-    <!-- RUE -->
-    <input type="text" placeholder="Rue" formControlName="rue"
-      class="w-full p-2 border rounded"/>
+      <!-- RUE -->
+      <input type="text" placeholder="Rue" formControlName="rue"
+        class="w-full p-2 border rounded"/>
 
-    <!-- CODE POSTAL -->
-    <input type="text" placeholder="Code Postal" formControlName="codePostal"
-      class="w-full p-2 border rounded"/>
+      <!-- CODE POSTAL -->
+      <input type="text" placeholder="Code Postal" formControlName="codePostal"
+        class="w-full p-2 border rounded"/>
 
-    <!-- VILLE -->
-    <input type="text" placeholder="Ville" formControlName="ville"
-      class="w-full p-2 border rounded"/>
+      <!-- VILLE -->
+      <input type="text" placeholder="Ville" formControlName="ville"
+        class="w-full p-2 border rounded"/>
 
-    <!-- DELETE -->
+      <button type="button"
+        (click)="removeAddress(i)"
+        class="bg-red-500 text-white px-3 py-1 rounded mt-2"
+        [disabled]="adresses.length === 1">
+
+        Supprimer
+      </button>
+
+    </div>
+
     <button type="button"
-      (click)="removeAddress(i)"
-      class="bg-red-500 text-white px-3 py-1 rounded mt-2"
-      [disabled]="adresses.length === 1">
+      (click)="addAddress()"
+      class="bg-blue-500 text-white px-4 py-2 rounded">
 
-      Supprimer
+      + Ajouter une adresse
     </button>
 
   </div>
-
-  <!-- ADD BUTTON -->
-  <button type="button"
-    (click)="addAddress()"
-    class="bg-blue-500 text-white px-4 py-2 rounded">
-
-    + Ajouter une adresse
-  </button>
-
-</div>
-
-
 
   <!-- PASSWORD -->
   <div>
     <input type="password" placeholder="Mot de passe" formControlName="password"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (passwordStrengthErrors) {
-
-      <div class="text-red-500 text-sm">
-
-        @if (!passwordStrengthErrors.hasUpperCase) {
-          <p>• Majuscule requise</p>
-        }
-
-        @if (!passwordStrengthErrors.hasLowerCase) {
-          <p>• Minuscule requise</p>
-        }
-
-        @if (!passwordStrengthErrors.hasNumber) {
-          <p>• Chiffre requis</p>
-        }
-
-        @if (!passwordStrengthErrors.hasSpecialChar) {
-          <p>• Caractère spécial requis</p>
-        }
-
-        @if (!passwordStrengthErrors.isValidLength) {
-          <p>• Minimum 8 caractères</p>
-        }
-
-      </div>
-    }
+    <p *appShowError="password; errorType: 'passwordStrength'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(password) }}
+    </p>
   </div>
 
   <!-- CONFIRM PASSWORD -->
@@ -183,22 +159,23 @@
     <input type="password" placeholder="Confirmer mot de passe" formControlName="confirmPassword"
       class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400"/>
 
-    @if (contactForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
-      <p class="text-red-500 text-sm">Les mots de passe ne correspondent pas</p>
-    }
+    <p *appShowError="confirmPassword; errorType: 'required'" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(confirmPassword) }}
+    </p>
+
+    <p *ngIf="confirmPassword?.dirty && contactForm.errors?.['mustMatch']" class="text-red-500 text-sm">
+      {{ validationService.getErrorMessage(confirmPassword) }}
+    </p>
   </div>
 
   <!-- SUBMIT -->
- <button type="submit"
-  class="w-full bg-green-600 text-white py-3 rounded-xl transition-all"
-  [class.opacity-50]="contactForm.invalid || contactForm.pending"
-  [class.cursor-not-allowed]="contactForm.invalid || contactForm.pending"
-  [disabled]="contactForm.invalid || contactForm.pending">
+  <button type="submit"
+    class="w-full bg-green-600 text-white py-3 rounded-xl transition-all"
+    [class.opacity-50]="contactForm.invalid || contactForm.pending"
+    [class.cursor-not-allowed]="contactForm.invalid || contactForm.pending"
+    [disabled]="contactForm.invalid || contactForm.pending">
 
-  Envoyer
-</button>
-
-
-
+    Envoyer
+  </button>
 
 </form>
