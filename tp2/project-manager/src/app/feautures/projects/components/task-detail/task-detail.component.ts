@@ -2,11 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/cor
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProjectService, Task } from '../../services/project.service';
-
+import { CommentFormComponent } from '../comment-form/comment-form.component';
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,CommentFormComponent],
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

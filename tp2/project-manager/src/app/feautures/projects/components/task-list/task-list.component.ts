@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router'; // ✅ Ajouter RouterModule
 import { trigger, transition, style, animate } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
 import { ProjectService, Project } from '../../services/project.service';
@@ -8,7 +8,7 @@ import { ProjectService, Project } from '../../services/project.service';
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule], // ✅ Ajouter RouterModule ici
   templateUrl: './task-list.component.html',
   animations: [
     trigger('fadeInOut', [
@@ -30,13 +30,18 @@ export class TaskListComponent implements OnInit {
   selectedStatus = signal<string>('');
   sortBy = signal<'priority' | 'status' | 'title'>('priority');
 
+  // Computed property pour obtenir l'ID du projet
+  projectId = computed(() => {
+    const currentProject = this.project();
+    return currentProject?.id || null;
+  });
+
   filteredTasks = computed(() => {
     let tasks = this.project()?.tasks || [];
     const priority = this.selectedPriority();
     const status = this.selectedStatus();
     const sort = this.sortBy();
     
-    // Apply filters
     if (priority) {
       tasks = tasks.filter(task => task.priority === priority);
     }
@@ -45,7 +50,6 @@ export class TaskListComponent implements OnInit {
       tasks = tasks.filter(task => task.status === status);
     }
     
-    // Apply sorting
     return this.sortTasks(tasks, sort);
   });
 
@@ -55,8 +59,16 @@ export class TaskListComponent implements OnInit {
     private projectService: ProjectService
   ) {}
 
+  goToTaskComments(taskId: number): void {
+    const projectId = this.projectId();
+    if (projectId) {
+      this.router.navigate(['/projects', projectId, 'tasks', taskId], {
+        fragment: 'comments'
+      });
+    }
+  }
+
   ngOnInit(): void {
-    // Load project from parent route
     this.route.parent?.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -67,7 +79,6 @@ export class TaskListComponent implements OnInit {
       }
     });
 
-    // Handle query parameters for filtering and sorting
     this.route.queryParamMap.subscribe(queryParams => {
       const sortParam = queryParams.get('sort');
       const statusParam = queryParams.get('status');
@@ -141,12 +152,3 @@ export class TaskListComponent implements OnInit {
     });
   }
 }
-
-  
-
-
-
-
-
-
-

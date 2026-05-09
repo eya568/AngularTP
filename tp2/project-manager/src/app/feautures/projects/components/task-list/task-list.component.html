@@ -60,7 +60,12 @@
               </span>
             </p>
           </div>
-
+<a
+              [routerLink]="['/projects', projectId(), 'tasks', task.id]"
+              [fragment]="'comments'"
+              class="px-3 py-2 text-sm rounded-xl bg-green-500 text-white shadow-sm hover:bg-green-600 transition cursor-pointer">
+              💬 Commentaires
+            </a>
           <!-- RIGHT BUTTON -->
           <button
             class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl
