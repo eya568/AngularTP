@@ -1,0 +1,67 @@
+<div class="overview-container">
+  @if (isLoading()) {
+    <p class="text-gray-500">Chargement...</p>
+  } @else if (project(); as proj) {
+    <div class="overview-grid">
+      <!-- Project Info Card -->
+      <div class="info-card">
+        <h3>Informations du projet</h3>
+        <div class="info-item">
+          <label>Nom:</label>
+          <span>{{ proj.name }}</span>
+        </div>
+        <div class="info-item">
+          <label>Description:</label>
+          <span>{{ proj.description }}</span>
+        </div>
+        <div class="info-item">
+          <label>Statut:</label>
+          <span [class]="'status-badge status-' + proj.status.toLowerCase()">
+            {{ proj.status }}
+          </span>
+        </div>
+        <div class="info-item">
+          <label>Date de création:</label>
+          <span>{{ proj.createdAt | date:'medium' }}</span>
+        </div>
+      </div>
+
+      <!-- Statistics Card -->
+      <div class="stats-card">
+        <h3>Statistiques</h3>
+        <div class="stat-item">
+          <span class="stat-label">Progression globale:</span>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="proj.progress || 0"></div>
+          </div>
+          <span class="stat-value">{{ proj.progress || 0 }}%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Nombre de tâches:</span>
+          <span class="stat-value">{{ proj.tasks?.length || 0 }}</span>
+        </div>
+      </div>
+
+      <!-- Tasks Summary -->
+      <div class="tasks-summary">
+        <h3>Résumé des tâches</h3>
+        @if (proj.tasks && proj.tasks.length > 0) {
+          <div class="task-summary-list">
+            @for (task of proj.tasks; track task.id) {
+              <div class="task-summary-item">
+                <span class="task-title">{{ task.title }}</span>
+                <span [class]="'task-status status-' + task.status.toLowerCase()">
+                  {{ task.status }}
+                </span>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="no-tasks">Aucune tâche pour ce projet</p>
+        }
+      </div>
+    </div>
+  } @else {
+    <p class="no-project">Projet non disponible</p>
+  }
+</div>

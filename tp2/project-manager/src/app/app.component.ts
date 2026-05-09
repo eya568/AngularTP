@@ -1,19 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { ProjectListComponent } from './feautures/projects/components/project-list/project-list.component';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, NavigationStart, NavigationEnd, NavigationError, RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.css'],
-  imports: [ProjectListComponent, CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent  {
+export class AppComponent implements OnInit {
   title = 'Mes Projets';
-  darkMode: boolean = false;
+  darkMode = signal(false);
+  isLoading = signal(false);
 
-  toggleTheme() {
-    this.darkMode = !this.darkMode;
+  constructor(private router: Router, public authService: AuthService) {}
+
+  ngOnInit(): void {
+    // Subscribe to router events for global loading state
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.isLoading.set(true);
+      } else if (event instanceof NavigationEnd || event instanceof NavigationError) {
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  toggleTheme(): void {
+    this.darkMode.update(current => !current);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

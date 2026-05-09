@@ -1,0 +1,36 @@
+<div class="admin-section">
+  <h2>Gestion des projets</h2>
+  <p>Administrez tous les projets du système</p>
+  
+  @if (isLoading()) {
+    <p class="loading">Chargement des projets...</p>
+  } @else if (projects().length > 0) {
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Statut</th>
+          <th>Tâches</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (project of projects(); track project.id) {
+          <tr>
+            <td>{{ project.id }}</td>
+            <td>{{ project.name }}</td>
+            <td><span class="status-badge">{{ project.status }}</span></td>
+            <td>{{ project.tasks?.length || 0 }}</td>
+            <td>
+              <button class="btn btn-sm btn-edit">Éditer</button>
+              <button class="btn btn-sm btn-delete">Supprimer</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p class="no-data">Aucun projet disponible</p>
+  }
+</div>

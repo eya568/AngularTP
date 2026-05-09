@@ -1,5 +1,12 @@
 <!-- Wrapper racine : applique le fond global -->
-<div class="min-h-screen" [ngClass]="darkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-green-100 via-amber-50 to-orange-100'">  <!-- Barre de navigation -->
+<div class="min-h-screen" [ngClass]="darkMode() ? 'bg-gray-900' : 'bg-gradient-to-br from-green-100 via-amber-50 to-orange-100'">
+  <!-- Loading indicator -->
+  @if (isLoading()) {
+    <div class="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-green-700 animate-pulse z-50">
+    </div>
+  }
+
+  <!-- Navigation bar -->
   <header class="flex justify-between items-center px-6 py-4
                  bg-white dark:bg-gray-800 dark:text-white
                  shadow dark:shadow-gray-700">
@@ -8,18 +15,56 @@
     </h1>
 
     <div class="flex gap-4 items-center">
-      <a routerLink="/" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">🗂️ Projets</a>
-      <a routerLink="/contact" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">✉️ Contacter</a>
-      <!-- Bouton toggle -->
+      <!-- Navigation Links (only if logged in) -->
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">🗂️ Projets</a>
+        
+        <!-- Admin Link (only for admins) -->
+        @if (authService.isAdmin()) {
+          <a routerLink="/admin" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold text-blue-600 dark:text-blue-400">⚙️ Admin</a>
+        }
+        
+        <a routerLink="/contact" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">✉️ Contacter</a>
+      }
+
+      <!-- User Info & Auth Buttons -->
+      <div class="flex gap-2 items-center">
+        <!-- Current User Display -->
+        @if (authService.isLoggedIn(); as isLogged) {
+          <span class="text-sm px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-lg">
+            👤 {{ authService.getCurrentUser()?.email }}
+            @if (authService.isAdmin()) {
+              <span class="ml-1 font-bold">👑 Admin</span>
+            }
+          </span>
+        }
+
+        <!-- Login / Logout Button -->
+        @if (authService.isLoggedIn()) {
+          <button
+            (click)="logout()"
+            class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold">
+            🚪 Déconnecter
+          </button>
+        } @else {
+          <a
+            routerLink="/login"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
+            🔐 Connecter
+          </a>
+        }
+      </div>
+
+      <!-- Toggle theme button -->
       <button
-        class="m-4 px-4 py-2 rounded bg-gray-200  text-gray-800 dark:bg-gray-700 dark:text-white"
+        class="m-4 px-4 py-2 rounded bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"
         (click)="toggleTheme()">
         🌙 Mode sombre / clair
       </button>
     </div>
   </header>
 
-  <!-- Contenu principal -->
+  <!-- Main content -->
   <main class="p-6">
     <router-outlet></router-outlet>
   </main>

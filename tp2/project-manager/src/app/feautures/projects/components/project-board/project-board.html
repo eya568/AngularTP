@@ -1,0 +1,57 @@
+<div class="board-container">
+  @if (isLoading()) {
+    <div class="text-center py-8">
+      <p class="text-gray-500">Chargement du board...</p>
+    </div>
+  } @else if (project(); as proj) {
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ proj.name }} - Kanban Board</h2>
+    
+    <!-- Kanban Board -->
+    <div class="grid grid-cols-3 gap-4">
+      <!-- En attente Column -->
+      <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+        <h3 class="font-semibold text-gray-700 mb-4">En attente ({{ pendingTasks().length }})</h3>
+        <div class="space-y-2">
+          @for (task of pendingTasks(); track task.id) {
+            <div class="bg-white p-3 rounded border-l-4 border-gray-400 shadow-sm hover:shadow-md transition cursor-move">
+              <p class="font-semibold text-sm text-gray-800">{{ task.title }}</p>
+              <div class="flex gap-2 mt-2">
+                <span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">{{ task.priority }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- En cours Column -->
+      <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+        <h3 class="font-semibold text-yellow-700 mb-4">En cours ({{ inProgressTasks().length }})</h3>
+        <div class="space-y-2">
+          @for (task of inProgressTasks(); track task.id) {
+            <div class="bg-white p-3 rounded border-l-4 border-yellow-400 shadow-sm hover:shadow-md transition cursor-move">
+              <p class="font-semibold text-sm text-gray-800">{{ task.title }}</p>
+              <div class="flex gap-2 mt-2">
+                <span class="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-700">{{ task.priority }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Terminé Column -->
+      <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+        <h3 class="font-semibold text-green-700 mb-4">Terminé ({{ completedTasks().length }})</h3>
+        <div class="space-y-2">
+          @for (task of completedTasks(); track task.id) {
+            <div class="bg-white p-3 rounded border-l-4 border-green-400 shadow-sm hover:shadow-md transition cursor-move">
+              <p class="font-semibold text-sm text-gray-800 line-through text-gray-500">{{ task.title }}</p>
+              <div class="flex gap-2 mt-2">
+                <span class="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">{{ task.priority }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

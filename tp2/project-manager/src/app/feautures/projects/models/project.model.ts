@@ -1,4 +1,5 @@
 export interface Task {
+  id: number;
   title: string;
   status: 'En attente' | 'En cours' | 'Terminé';
   priority: 'Haute' | 'Moyenne' | 'Basse';

@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';    
-import { TaskListComponent } from '../task-list/task-list.component';
-import { ProjectDetailsComponent } from '../project-details/project-details.component'; // ✅ AJOUT
 import { FormsModule, NgModel } from '@angular/forms';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-project-list',
   standalone: true,
   imports: [
     CommonModule,        
-    ProjectDetailsComponent,
     FormsModule,
     DashboardComponent,
-    
+    RouterLink
   ],
   templateUrl: './project-list.component.html'
 })
@@ -28,26 +27,44 @@ export class ProjectListComponent {
   }, 3000);
 }
   projects = [
-    {
-      name: 'Projet 1',
-      description: 'Description 1',
-      createdAt: new Date(),
-      status: 'En cours',
-      tasks: [
-        { title: 'Tâche 1', priority: 'Haute', status: 'En attente' },
-        { title: 'Tâche 2', priority: 'Moyenne', status: 'En cours' }
-      ]
-    },
-    {
-      name: 'Projet 2',
-      description: 'Description 2',
-      createdAt: new Date(),
-      status: 'Terminé',
-      tasks: [
-        { title: 'Tâche 1', priority: 'Basse', status: 'Terminé' }
-      ]
-    }
-  ];
+  {
+    id: 1,
+    name: 'Projet 1',
+    description: 'Description 1',
+    createdAt: new Date(),
+    status: 'En cours',
+    tasks: [
+      {
+        id: 1,
+        title: 'Tâche 1',
+        priority: 'Haute',
+        status: 'En attente'
+      },
+      {
+        id: 2,
+        title: 'Tâche 2',
+        priority: 'Moyenne',
+        status: 'En cours'
+      }
+    ]
+  },
+
+  {
+    id: 2,
+    name: 'Projet 2',
+    description: 'Description 2',
+    createdAt: new Date(),
+    status: 'Terminé',
+    tasks: [
+      {
+        id: 1,
+        title: 'Tâche 1',
+        priority: 'Basse',
+        status: 'Terminé'
+      }
+    ]
+  }
+];
   selectProject(project : any){
     this.selectedProject = project;
   }

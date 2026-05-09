@@ -29,13 +29,14 @@
         <p class="text-green-500">{{ project.description }}</p>
         <span class="inline-block px-3 py-1 text-sm rounded-full bg-green-100 text-green-700 font-medium">{{ project.status }}</span>
         <button
-      class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
-             bg-green-600 text-white shadow-sm
-             hover:bg-green-700 hover:shadow-md
-             active:scale-95 transition-all duration-200"
-      (click)="selectProject(project)">
-      👁 Détails
-    </button>
+  [routerLink]="['/projects', project.id]"
+  class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
+         bg-green-600 text-white shadow-sm
+         hover:bg-green-700 hover:shadow-md
+         active:scale-95 transition-all duration-200">
+
+  👁 Détails
+</button>
 
     <button
       class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
@@ -45,10 +46,7 @@
       (click)="deleteProject(project)">
       🗑 Supprimer
     </button>
-        <app-project-details
-          *ngIf="selectedProject === project"
-          [project]="selectedProject">
-        </app-project-details>
+
       </div>
     }
   </div>

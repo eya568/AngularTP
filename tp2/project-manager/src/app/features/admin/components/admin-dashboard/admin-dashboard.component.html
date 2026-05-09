@@ -1,0 +1,43 @@
+<div class="admin-dashboard">
+  <div class="header">
+    <h1>Tableau de bord Admin</h1>
+    <p>Gestion complète de l'application</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    @for (stat of stats(); track stat.label) {
+      <div class="stat-card">
+        <div class="stat-icon">{{ stat.icon }}</div>
+        <div class="stat-content">
+          <p class="stat-label">{{ stat.label }}</p>
+          <p class="stat-value">{{ stat.value }}</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Navigation Links -->
+  <div class="admin-nav">
+    <div class="nav-section">
+      <h2>Gestion</h2>
+      <div class="nav-links">
+        <a routerLink="projects" class="nav-link">📋 Gérer les projets</a>
+        <a routerLink="users" class="nav-link">👥 Gérer les utilisateurs</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="activity-section">
+    <h2>Activité récente</h2>
+    <div class="activity-list">
+      @for (activity of recentActivities; track activity.id) {
+        <div class="activity-item">
+          <p class="activity-action">{{ activity.action }}</p>
+          <p class="activity-time">{{ activity.timestamp }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

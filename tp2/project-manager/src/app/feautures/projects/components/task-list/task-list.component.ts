@@ -1,19 +1,16 @@
-import { Component, Input ,Output,EventEmitter} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HighlightStatusDirective } from '../../../../highlight-status';
-import { PriorityColorPipe } from '../../../../priority-color-pipe';
+import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { StatusEmojiPipe } from '../../../../pipes/status-emoji.pipe-pipe';
 import { FormsModule } from '@angular/forms';
+import { ProjectService, Project } from '../../services/project.service';
+
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, FormsModule,
-    HighlightStatusDirective, 
-    PriorityColorPipe,
-    StatusEmojiPipe],
+  imports: [CommonModule, FormsModule],
   templateUrl: './task-list.component.html',
-   animations: [
+  animations: [
     trigger('fadeInOut', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-10px)' }),
@@ -23,28 +20,126 @@ import { FormsModule } from '@angular/forms';
         animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(10px)' }))
       ])
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskListComponent {
-selectedPriority: string = '';
-  @Input() tasks: any[] = [];
-@Output() statusChanged = new EventEmitter<void>();
+export class TaskListComponent implements OnInit {
+  project = signal<Project | null>(null);
+  isLoading = signal(true);
+  selectedPriority = signal<string>('');
+  selectedStatus = signal<string>('');
+  sortBy = signal<'priority' | 'status' | 'title'>('priority');
 
-changeStatus(task: any) {
-  // exemple simple : toggle
-  task.status = task.status === 'Terminé' ? 'En cours' : 'Terminé';
+  filteredTasks = computed(() => {
+    let tasks = this.project()?.tasks || [];
+    const priority = this.selectedPriority();
+    const status = this.selectedStatus();
+    const sort = this.sortBy();
+    
+    // Apply filters
+    if (priority) {
+      tasks = tasks.filter(task => task.priority === priority);
+    }
+    
+    if (status) {
+      tasks = tasks.filter(task => task.status === status);
+    }
+    
+    // Apply sorting
+    return this.sortTasks(tasks, sort);
+  });
 
-  this.statusChanged.emit();
-}
- get filteredTasks() {
-  if (!this.selectedPriority) {
-    return this.tasks;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private projectService: ProjectService
+  ) {}
+
+  ngOnInit(): void {
+    // Load project from parent route
+    this.route.parent?.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.projectService.getProjectById(Number(id)).subscribe(proj => {
+          this.project.set(proj || null);
+          this.isLoading.set(false);
+        });
+      }
+    });
+
+    // Handle query parameters for filtering and sorting
+    this.route.queryParamMap.subscribe(queryParams => {
+      const sortParam = queryParams.get('sort');
+      const statusParam = queryParams.get('status');
+      const priorityParam = queryParams.get('priority');
+      
+      if (sortParam === 'priority' || sortParam === 'status' || sortParam === 'title') {
+        this.sortBy.set(sortParam);
+      }
+      
+      if (statusParam) {
+        this.selectedStatus.set(statusParam);
+      }
+      
+      if (priorityParam) {
+        this.selectedPriority.set(priorityParam);
+      }
+    });
   }
 
-  return this.tasks.filter(task =>
-    task.priority === this.selectedPriority
-  );
-}
+  private sortTasks(tasks: any[], sortBy: string): any[] {
+    const sorted = [...tasks];
+    
+    switch (sortBy) {
+      case 'priority':
+        const priorityOrder: Record<string, number> = { 'Haute': 0, 'Moyenne': 1, 'Basse': 2 };
+        return sorted.sort((a, b) => {
+          const orderA = priorityOrder[a.priority as string] || 3;
+          const orderB = priorityOrder[b.priority as string] || 3;
+          return orderA - orderB;
+        });
+      
+      case 'status':
+        const statusOrder: Record<string, number> = { 'En attente': 0, 'En cours': 1, 'Terminé': 2 };
+        return sorted.sort((a, b) => {
+          const orderA = statusOrder[a.status as string] || 3;
+          const orderB = statusOrder[b.status as string] || 3;
+          return orderA - orderB;
+        });
+      
+      case 'title':
+        return sorted.sort((a, b) => a.title.localeCompare(b.title, 'fr'));
+      
+      default:
+        return sorted;
+    }
+  }
+
+  changeStatus(task: any): void {
+    task.status = task.status === 'Terminé' ? 'En cours' : 'Terminé';
+  }
+
+  updateQueryParams(): void {
+    const queryParams: any = {};
+    
+    if (this.sortBy() !== 'priority') {
+      queryParams.sort = this.sortBy();
+    }
+    
+    if (this.selectedStatus()) {
+      queryParams.status = this.selectedStatus();
+    }
+    
+    if (this.selectedPriority()) {
+      queryParams.priority = this.selectedPriority();
+    }
+    
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge'
+    });
+  }
 }
 
   

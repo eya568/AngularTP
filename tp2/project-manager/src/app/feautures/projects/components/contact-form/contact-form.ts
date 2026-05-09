@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { passwordStrengthValidator, matchPasswordValidator } from '../../../../../validators/custom-validators';
-import { UserService } from '../services/userservice';
+import { UserService } from '../../services/userservice';
 import { emailExistsValidator } from '../../../../../validators/emailExistValidator';
 import { CommonModule } from '@angular/common';
-import { ValidationService } from '../services/ValidationService';
-import { ShowErrorDirective } from '../directives/show-error';
+import { ValidationService } from '../../services/ValidationService';
+import { ShowErrorDirective } from '../../directives/show-error';
 @Component({
   selector: 'app-contact-form',
   standalone: true,

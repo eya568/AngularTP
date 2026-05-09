@@ -1,30 +1,84 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Project, Task } from '../models/project.model';
-import { TaskListComponent } from '../task-list/task-list.component';
+import { ProjectService, Project } from '../../services/project.service';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
-import { FriendlyDatePipe } from '../../../../pipes/friendly-date.pipe-pipe';
+
 @Component({
   selector: 'app-project-details',
   standalone: true,
-  imports: [CommonModule, TaskListComponent, StatusBadgeComponent, FriendlyDatePipe],
+  imports: [CommonModule, StatusBadgeComponent, RouterOutlet],
   templateUrl: './project-details.component.html',
-  styleUrls: ['./project-details.component.css']
+  styleUrls: ['./project-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectDetailsComponent {
-  @Input() project!: Project;
-  @Output() statusChanged = new EventEmitter<void>();
+export class ProjectDetailsComponent implements OnInit {
+  project = signal<Project | null>(null);
+  isLoading = signal(true);
+  error = signal<string | null>(null);
+  activeTab = signal<string>('overview');
 
-  getProgress(): number {
-    if (!this.project.tasks?.length) return 0;
-    const completedTasks = this.project.tasks.filter(task => task.status === 'Terminé').length;
-    return (completedTasks / this.project.tasks.length) * 100;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private projectService: ProjectService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.loadProject(Number(id));
+      }
+    });
+
+    // Subscribe to route changes to update active tab
+    this.route.url.subscribe(url => {
+      if (url.length > 0) {
+        this.activeTab.set(url[0].path);
+      }
+    });
   }
 
-  @Output() notify = new EventEmitter<string>();
+  private loadProject(id: number): void {
+    this.isLoading.set(true);
+    this.error.set(null);
+    
+    this.projectService.getProjectById(id).subscribe({
+      next: (project) => {
+        if (project) {
+          this.project.set(project);
+        } else {
+          this.error.set('Projet non trouvé');
+        }
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.error.set('Erreur lors du chargement du projet');
+        this.isLoading.set(false);
+      }
+    });
+  }
 
-onStatusChanged() {
-  this.statusChanged.emit();
-  this.notify.emit("Statut de la tâche mis à jour");
-}
+  getProgress(): number {
+    const proj = this.project();
+    if (!proj?.tasks?.length) return 0;
+    const completedTasks = proj.tasks.filter(task => task.status === 'Terminé').length;
+    return (completedTasks / proj.tasks.length) * 100;
+  }
+
+  onStatusChanged(): void {
+    console.log('Task status changed');
+  }
+
+  navigateToTab(tab: string): void {
+    const projectId = this.project()?.id;
+    if (projectId) {
+      this.router.navigate(['/projects', projectId, tab]);
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/projects']);
+  }
 }

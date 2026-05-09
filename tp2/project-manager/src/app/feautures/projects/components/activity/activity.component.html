@@ -1,0 +1,25 @@
+<div class="activity-container">
+  @if (isLoading()) {
+    <p class="text-gray-500">Chargement de l'activité...</p>
+  } @else {
+    <h2>Historique d'activité</h2>
+    
+    @if (activities().length > 0) {
+      <div class="activity-timeline">
+        @for (activity of activities(); track activity.id) {
+          <div class="activity-item">
+            <div class="activity-icon">
+              {{ getActivityIcon(activity.type) }}
+            </div>
+            <div class="activity-content">
+              <p class="activity-message">{{ activity.message }}</p>
+              <p class="activity-timestamp">{{ formatDate(activity.timestamp) }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="no-activity">Aucune activité pour le moment</p>
+    }
+  }
+</div>

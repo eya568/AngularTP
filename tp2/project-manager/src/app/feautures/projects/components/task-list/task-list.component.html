@@ -1,70 +1,80 @@
 <div class="mt-4 space-y-4">
-<div class="mb-4">
-  <select
-    class="w-full p-2 border rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-    [(ngModel)]="selectedPriority">
+  <!-- Filters and Sort Controls -->
+  <div class="grid grid-cols-3 gap-3 mb-4">
+    <!-- Sort Dropdown -->
+    <select
+      class="p-2 border rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+      [ngModel]="sortBy()"
+      (ngModelChange)="sortBy.set($event); updateQueryParams()">
+      <option value="priority">Trier par Priorité</option>
+      <option value="status">Trier par Statut</option>
+      <option value="title">Trier par Titre</option>
+    </select>
 
-    <option value="">Toutes les priorités</option>
-    <option value="Haute">Haute</option>
-    <option value="Moyenne">Moyenne</option>
-    <option value="Basse">Basse</option>
+    <!-- Priority Filter -->
+    <select
+      class="p-2 border rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+      [ngModel]="selectedPriority()"
+      (ngModelChange)="selectedPriority.set($event); updateQueryParams()">
+      <option value="">Toutes les priorités</option>
+      <option value="Haute">Haute</option>
+      <option value="Moyenne">Moyenne</option>
+      <option value="Basse">Basse</option>
+    </select>
 
-  </select>
-</div>
-  <div *ngIf="tasks && tasks.length > 0; else noTasks" class="space-y-4">
-    
-@for (task of filteredTasks; track task.title){
-        <div
-        class="group flex items-center justify-between p-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
-        appHighlightStatus="{{ task.status }}"
-        @fadeInOut>
-
-        <!-- LEFT -->
-        <div>
-          <p class="text-lg font-semibold"
-             [ngClass]="task.priority | priorityColor">
-            {{ task.title }}
-          </p>
-
-          <p class="text-sm text-gray-500 mt-1 flex gap-2 items-center">
-            <span class="px-2 py-0.5 rounded bg-gray-100 text-xs">
-              {{ task.priority }}
-            </span>
-
-            <span
-              class="px-2 py-0.5 rounded text-xs font-medium"
-              [ngClass]="{
-                'bg-green-100 text-green-700': task.status === 'Terminé',
-                'bg-yellow-100 text-yellow-700': task.status === 'En cours',
-                'bg-gray-100 text-gray-600': task.status === 'En attente'
-              }">
-              {{ task.status }}
-            </span>
-          </p>
-        </div>
-
-        <!-- RIGHT BUTTON -->
-        <button
-          class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl
-                 bg-blue-500 text-white shadow-sm
-                 hover:bg-blue-600 hover:shadow-md
-                 active:scale-95
-                 transition-all duration-200"
-          (click)="changeStatus(task)">
-
-         <p class="text-sm text-gray-500">
-  {{ task.status | statusEmoji }} {{ task.status }}
-</p>
-
-        </button>
-
-      </div>
-    }
-
+    <!-- Status Filter -->
+    <select
+      class="p-2 border rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+      [ngModel]="selectedStatus()"
+      (ngModelChange)="selectedStatus.set($event); updateQueryParams()">
+      <option value="">Tous les statuts</option>
+      <option value="En attente">En attente</option>
+      <option value="En cours">En cours</option>
+      <option value="Terminé">Terminé</option>
+    </select>
   </div>
 
-  <ng-template #noTasks>
-    <p class="text-gray-400 italic text-center">Aucune tâche</p>
-  </ng-template>
+  @if ((project()?.tasks?.length || 0) > 0) {
+    <div class="space-y-4">
+      @for (task of filteredTasks(); track task.id) {
+        <div
+          class="group flex items-center justify-between p-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
+          @fadeInOut>
+          <!-- LEFT -->
+          <div>
+            <p class="text-lg font-semibold text-gray-800">
+              {{ task.title }}
+            </p>
+            <p class="text-sm text-gray-500 mt-1 flex gap-2 items-center">
+              <span class="px-2 py-0.5 rounded bg-gray-100 text-xs">
+                {{ task.priority }}
+              </span>
+              <span
+                class="px-2 py-0.5 rounded text-xs font-medium"
+                [ngClass]="{
+                  'bg-green-100 text-green-700': task.status === 'Terminé',
+                  'bg-yellow-100 text-yellow-700': task.status === 'En cours',
+                  'bg-gray-100 text-gray-600': task.status === 'En attente'
+                }">
+                {{ task.status }}
+              </span>
+            </p>
+          </div>
 
+          <!-- RIGHT BUTTON -->
+          <button
+            class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl
+                   bg-blue-500 text-white shadow-sm
+                   hover:bg-blue-600 hover:shadow-md
+                   active:scale-95
+                   transition-all duration-200"
+            (click)="changeStatus(task)">
+            Changer statut
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="text-gray-400 italic text-center">Aucune tâche</p>
+  }
 </div>

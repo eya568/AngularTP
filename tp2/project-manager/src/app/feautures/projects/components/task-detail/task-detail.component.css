@@ -1,0 +1,124 @@
+.task-detail {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.task-header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.back-button {
+  padding: 10px 20px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #4b5563;
+}
+
+.task-card {
+  background: white;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1e40af;
+  margin-bottom: 16px;
+}
+
+.status-priority-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.status-badge,
+.priority-badge {
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.status-green {
+  background-color: #22c55e;
+}
+
+.status-blue {
+  background-color: #3b82f6;
+}
+
+.status-gray {
+  background-color: #9ca3af;
+}
+
+.priority-red {
+  background-color: #ef4444;
+}
+
+.priority-yellow {
+  background-color: #eab308;
+  color: #1f2937;
+}
+
+.priority-green {
+  background-color: #22c55e;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.comments-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+  margin-top: 24px;
+}
+
+.comments-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
